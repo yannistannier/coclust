@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import {Badge, Row, Col, Card, CardHeader, Button, CardFooter, CardBody, Label, Input, FormGroup,
 ListGroup, ListGroupItem, Nav, NavItem, NavLink, Table, TabContent, TabPane, CustomInput} from 'reactstrap';
-import { BounceLoader, BarLoader } from 'react-spinners';
 import MultiSelect from "@kenshooui/react-multi-select";
 import Select from 'react-select';
 import axios from 'axios'
 import classnames from 'classnames';
 import Switch from "react-switch";
 import "@kenshooui/react-multi-select/dist/style.css"
+import Loader from 'react-loader-spinner'
+
+
+import {HorizontalBar} from 'react-chartjs-2';
+
+
 
 class Coclust extends Component {
   constructor(props) {
@@ -18,6 +23,9 @@ class Coclust extends Component {
     this.toggle = this.toggle.bind(this);
     this.goAnalyse = this.goAnalyse.bind(this)
     this.handleCoclust = this.handleCoclust.bind(this)
+    this.handleNbCluster = this.handleNbCluster.bind(this)
+    this.handleDistance = this.handleDistance.bind(this)
+    this.callApi = this.callApi.bind(this)
 
     this.state = {
       maladies:[],
@@ -26,9 +34,16 @@ class Coclust extends Component {
       activeTab: '1',
       selectedItems: [],
       coclust:1,
-      tfidf:true,
+      tfidf:false,
+      nb:2,
+      distance:"euclidean",
 
-      img1:null
+      tab1:null,
+
+      tab2:null,
+      cluster2:[],
+
+      tab3:null
     };
   }
 
@@ -46,8 +61,16 @@ class Coclust extends Component {
     this.setState({tfidf:check});
   }
 
+  handleNbCluster(e){
+    this.setState({nb:e.target.value})
+  }
+
   handleCoclust(e) {
     this.setState({coclust:e.target.value})
+  }
+
+  handleDistance(e) {
+    this.setState({distance:e.target.value})
   }
 
   toggle(tab) {
@@ -55,6 +78,10 @@ class Coclust extends Component {
       this.setState({
         activeTab: tab
       });
+
+      console.log(tab)
+
+
     }
   }
 
@@ -85,24 +112,94 @@ class Coclust extends Component {
 
   goAnalyse(){
 
-    axios.post('http://localhost:5000/genes_termes', {
-      genes: this.state.selectGenes, tfidf : this.state.tfidf, coclust: this.state.coclust
-    })
-    .then(function (response) {
-      console.log(response.data)
-      this.setState({
-        img1: response.data.img
-      });
-    }.bind(this))
-    .catch(function (error) {
-      console.log(error);
-    });
+    // axios.post('http://localhost:5000/genes_termes', {
+    //   genes: this.state.selectGenes, tfidf : this.state.tfidf, coclust: this.state.coclust
+    // })
+    // .then(function (response) {
+    //   console.log(response.data)
+    //   this.setState({
+    //     img1: response.data.img,
+    //     cluster1: response.data.cluster
+    //   });
+    // }.bind(this))
+    // .catch(function (error) {
+    //   console.log(error);
+    // });
 
+    if(this.state.genes.length > 0){
+        if(this.state.activeTab == "1"){
+            this.setState({tab1:"pending"})
+            this.callApi("http://localhost:5000/genes_articles")
+        }
+        if(this.state.activeTab == "2"){
+          this.setState({tab2:"pending"})
+          this.callApi("http://localhost:5000/genes_termes")
+        }
+        if(this.state.activeTab == "3"){
+          this.setState({tab3:"pending"})
+          this.callApi("http://localhost:5000/genes_genes")
+        }
+        
+    }
+  }
+
+  callApi(url){
+      axios.post(url, {
+        genes: this.state.selectGenes, tfidf : this.state.tfidf, coclust: this.state.coclust,
+        nb : this.state.nb, distance:this.state.distance
+      })
+      .then(function (response) {
+        console.log(response.data)
+        if(response.data.tab == 1){
+          this.setState({tab1:"fullfilled"})
+        }
+
+        if(response.data.tab == 2){
+          this.setState({tab2:"fullfilled", cluster2: response.data.cluster})
+        }
+
+        if(response.data.tab == 3){
+          this.setState({tab3:"fullfilled"})
+        }
+        
+      }.bind(this))
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
 
 render() {
-    const { items, selectedItems, maladies, genes, img1} = this.state;
+    const { items, selectedItems, maladies, genes, distance, img1, cluster2, tab1, tab2, tab3} = this.state;
+    let r = Math.random().toString(36).substring(7);
+
+    let c1 = cluster2.map(function(d, idx){
+      console.log(d)
+      return ( 
+          <div key={idx}>
+            <HorizontalBar
+              data={{
+                labels: d["name"],
+                datasets: [
+                  {
+                    label: 'Cluster' + idx,
+                    backgroundColor: 'rgba(255,99,132,0.2)',
+                    borderColor: 'rgba(255,99,132,1)',
+                    borderWidth: 1,
+                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                    hoverBorderColor: 'rgba(255,99,132,1)',
+                    data: d["value"]
+                  }
+                ]
+              }}
+              height={250}
+              options={{
+                maintainAspectRatio: false
+              }}
+            /> 
+        </div>
+      )
+    })
 
     return (
       <div className="animated fadeIn">
@@ -153,8 +250,8 @@ render() {
 
                       <Col>
                         <FormGroup>
-                          <Label for="exampleSelect">Nb Cluster</Label>
-                          <Input type="email" name="email" id="exampleEmail" placeholder="" />
+                          <Label for="exampleSelect">Nb Cluster (0 if auto)</Label>
+                          <Input type="email" name="nb" id="nb" value={this.state.nb} onChange={this.handleNbCluster} />
                         </FormGroup>
                       </Col>
                   </Row>
@@ -193,11 +290,11 @@ render() {
 
                   <FormGroup>
                     <Label for="exampleSelect">Definir la distance</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                      <option>Euclidian</option>
-                      <option>Hamming</option>
-                      <option>Jaccob</option>
-                      <option>Cosinus</option>
+                    <Input type="select" name="select" id="exampleSelect" onChange={this.handleDistance}>
+                      <option value="euclidean">Euclidean</option>
+                      <option value="hamming">Hamming</option>
+                      <option value="jaccard">Jaccard</option>
+                      <option value="cosine">Cosine</option>
                     </Input>
 
                   </FormGroup>
@@ -217,14 +314,14 @@ render() {
                     <NavLink
                       className={classnames({ active: this.state.activeTab === '1' })}
                       onClick={() => { this.toggle('1'); }} >
-                      Genes - terms
+                      Genes - Article
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       className={classnames({ active: this.state.activeTab === '2' })}
                       onClick={() => { this.toggle('2'); }} >
-                      Genes - Article
+                      Genes - terms
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -239,13 +336,92 @@ render() {
 
                 <TabContent activeTab={this.state.activeTab}>
                   <TabPane tabId="1">
-                      <img src={"http://localhost:5000/images/test.jpg"}  height={400}/>
+                    {tab1 == "fullfilled" &&
+                      <div> 
+                          <h3> Coclust </h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-ga1-"+r+".jpg"}  width="100%" style={{maxHeight:250}}/>
+                          </div>
+                          <h3 style={{marginTop:30, marginBottom:20}}> Hierarchical Clustering - {distance} </h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-ga2-"+r+".jpg"}  width="70%"/>
+                          </div>
+                      </div>
+                    }
+                    {tab1 == "pending" &&
+                      <div style={{textAlign:"center", padding:50}}>
+                        <Loader type="Grid" color="#4dbd74" />
+                      </div>
+                    }
+                    {tab1 == null &&
+                      <div style={{textAlign:"center"}}>
+                          No data
+                      </div>
+                    }
+
+
+                    </TabPane>
+                  <TabPane tabId="2" >
+
+                    {tab2 == "pending" &&
+                      <div style={{textAlign:"center", padding:50}}>
+                        <Loader type="Grid" color="#4dbd74" />
+                      </div>
+                    }
+
+                    {tab2 == null &&
+                      <div style={{textAlign:"center"}}>
+                          No data
+                      </div>
+                    }
+                     {tab2 == "fullfilled" &&
+                        <div>
+                          <h3> Hierarchical Clustering - {distance}</h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-gt2-"+r+".jpg"}  height={300}/>
+                          </div>
+
+                          <h3> Coclust </h3>
+                          <h4 /> 
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-gt1-"+r+".jpg"}  height={300}/>
+                          </div>
+
+                          <div style={{textAlign:"center", paddingLeft:40, paddingRight:40}}>
+                            {c1}
+                          </div>
+                        </div>
+                     }
+
                   </TabPane>
-                  <TabPane tabId="2">
-                    salut
-                  </TabPane>
+                  
                   <TabPane tabId="3">
-                    salut
+                    {tab3 == "pending" &&
+                      <div style={{textAlign:"center", padding:50}}>
+                        <Loader type="Grid" color="#4dbd74" />
+                      </div>
+                    }
+
+                    {tab3 == null &&
+                      <div style={{textAlign:"center"}}>
+                          No data
+                      </div>
+                    }
+
+                      {tab3 == "fullfilled" &&
+                        <div>
+                          <h3> Hierarchical Clustering - {distance}</h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-gg1-"+r+".jpg"}  width="100%" style={{maxHeight:250}} />
+                          </div>
+
+                          <h3> Coclust </h3>
+                          <h4 /> 
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-gg2-"+r+".jpg"}  width="70%"/>
+                          </div>
+                        </div>
+                     }
                   </TabPane>
                 </TabContent>
 
