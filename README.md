@@ -16,10 +16,11 @@ L’utilisation de toutes ces bases de données nous aura permis d’isoler une 
 
 
 ## Named Entity Recognition
-En plus des noms de maladies et de gènes isolés grâce aux datasets précédents, un NER aura été lancé sur les fichiers asthma et autism afin d'aggrémenter le jeu de données de nouvelles maladies et de nouveaux gênes, le NER est également disponible sur le site pour test.
-
+En plus des noms de maladies et de gènes isolés grâce aux datasets précédents, un NER (Spacy) aura été lancé sur les fichiers asthma et autism afin d'aggrémenter le jeu de données de nouvelles maladies et de nouveaux gênes, le NER est également disponible sur le site pour experimentation.
 
 ## Coclust
-### Gene Gene
-### Gene Terme
-### Gene Article
+
+### Approches proposées
+#### Gene Gene
+#### Gene Terme
+#### Gene Article
