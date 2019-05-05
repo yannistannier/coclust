@@ -23,12 +23,13 @@ En plus des noms de maladies et de gènes isolés grâce aux datasets précéden
 ## Coclust
 Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) pour le co-clustering ainsi que [Scikit](https://scikit-learn.org/stable/) pour le clustering hiérarchique.
 
-
-
 ### Approches proposées
 Différentes approches pour le co-clustering sont proposées:
 #### Gene Gene
+Une approche Gene Gene,
 #### Gene Terme
+Une approche Gene Terme,
 #### Gene Article
+Une approche Gene Article,
 
 ## Références
