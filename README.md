@@ -19,7 +19,7 @@ L’utilisation de toutes ces bases de données nous aura permis d’isoler une 
 En plus des noms de maladies et de gènes isolés grâce aux datasets précédents, un NER (Spacy) aura été lancé sur les fichiers asthma et autism afin d'aggrémenter le jeu de données de nouvelles maladies et de nouveaux gênes, le NER est également disponible sur le site pour experimentation.
 
 ## Coclust
-Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) ainsi que Scikit pour le clustering hiérarchique.
+Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) ainsi que [Scikit](https://scikit-learn.org/stable/) pour le clustering hiérarchique.
 
 
 
@@ -27,3 +27,5 @@ Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclus
 #### Gene Gene
 #### Gene Terme
 #### Gene Article
+
+## Références
