@@ -23,6 +23,14 @@ En plus des noms de maladies et de gènes isolés grâce aux datasets précéden
 ## Coclust
 Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) pour le co-clustering ainsi que [Scikit](https://scikit-learn.org/stable/) pour le clustering hiérarchique.
 
+Cette interface permettra :
+* De sélectionner la maladie concernée et de spécifier la liste des gènes G correspondant à cette maladie.
+* De calculer et d’afficher une matrice de similarités pairwise entre les gènes du groupe G ainsi que le
+boxplot correspondant.
+* De déclencher et d’afficher les résultats d’un clustering hiérarchique (en justifiant le choix du critère d’agrégation) sur la matrice des vecteurs de gènes de G.
+* De déclencher et d’afficher les résultats d’un co-clustering sur la matrice des vecteurs de gènes de G,
+avec possibilité de choisir entre les différentes méthodes disponibles dans la bibliothèque Coclust.
+
 ### Approches proposées
 Différentes approches pour le co-clustering sont proposées:
 #### Gene Gene
