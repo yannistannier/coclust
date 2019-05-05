@@ -24,6 +24,7 @@ Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclus
 
 
 ### Approches proposées
+Différentes approches pour le co-clustering sont proposées:
 #### Gene Gene
 #### Gene Terme
 #### Gene Article
