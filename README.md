@@ -1,7 +1,7 @@
 # Coclustering: gènes et maladies
 La plupart des études d’association se limitent souvent à la mise en évidence d’un lien entre un groupe de gènes G et une maladie. Cependant, l’étape suivante est l’étude des interaction entre les gènes de G pour mieux comprendre comment ces gènes coopèrent pour provoquer l’apparition d’une maladie ou d’un phénotype.
 
-La présentation de la solution se présente sous forme d'une interface graphique Web utilisant le framework Flask disponible [ici](insert_liens_site)
+La présentation de la solution se présente sous forme d'une interface graphique Web utilisant le framework Flask dont l'utilisation est disponible [ici](insert_liens_site)
 
 On a un ensemble G de k gènes suspectés d’être associés à une maladie et on construit des représentations vectorielles de ces gènes. Pour étudier ces interactions, nous avons utilisé des techniques de clustering hiérarchique sur le groupe G étudié ainsi que des techniques de co-clustering afin d’obtenir automatiquement des ensembles de termes
 descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié G.
