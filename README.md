@@ -25,7 +25,7 @@ Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclus
 
 Afin d'être le plus dynamique possible, l'interface permet:
 * De sélectionner la maladie concernée et de spécifier la liste des gènes G correspondant à cette maladie.
-* De choisir le type de coclustering: 
+* De choisir le type de coclustering ainsi que le nombre de cluster si l'utilisateur souhaite en spécifier un, dans le cas contraire le nombre de clusters maximisant la modularity sera affiché.
 * De déclencher et d’afficher les résultats d’un clustering hiérarchique (en justifiant le choix du critère d’agrégation) sur la matrice des vecteurs de gènes de G.
 * De déclencher et d’afficher les résultats d’un co-clustering sur la matrice des vecteurs de gènes de G,
 avec possibilité de choisir entre les différentes méthodes disponibles dans la bibliothèque Coclust.
