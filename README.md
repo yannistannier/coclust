@@ -53,7 +53,7 @@ Afin d'être le plus dynamique possible, l'interface permet:
 Différentes approches pour le co-clustering sont proposées:
 * Une approche Gène Article, les articles correspondant aux articles dans lesquels la maladie et les gènes selectionnés apparaissent.
 * Une approche Gène Terme, les termes correspondant aux articles dans lesquels la maladie et les gènes selectionnés apparaissent.
-* Une approche Gène Gène.
+* Une approche Gène Gène similaire dans le traitement.
 
 
 ## Choix des critères d'aggregation
