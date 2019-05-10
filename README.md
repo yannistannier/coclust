@@ -50,4 +50,6 @@ Une approche Gène Terme,
 #### Gene Article
 Une approche Gène Article,
 
+### Choix des critères d'aggregation
+
 ## Références
