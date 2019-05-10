@@ -9,7 +9,7 @@ descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié
 ### Organisation du repository
 * [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application, les informations d'installation sont disponibles dans le readme du dossier.
 * [Notebook](https://github.com/yannistannier/coclust/tree/master/notebook) : Preprocessing de la base de données et premiers tests de clustering.
-* [Server](https://github.com/yannistannier/coclust/tree/master/server) : Back de l'application, et [api](https://github.com/JosephGesnouin/coclust/blob/master/server/api.py) Flask.
+* [Server](https://github.com/yannistannier/coclust/tree/master/server) : Back de l'application, et [Api](https://github.com/JosephGesnouin/coclust/blob/master/server/api.py) Flask.
 
 ## Datasets
 Dans le but d’être le plus précis possible et d'obtenir un nombre de noms de maladies et de gênes conséquents, il aura fallu prendre en considération de nombreuses bases de données: en particulier, si l’on souhaite concevoir une base de données beaucoup plus grande. C’est ce que nous avons réalisé dans le cadre de ce projet. Les bases de données utilisées sont nombreuses:
