@@ -53,12 +53,11 @@ Une approche Gène Terme,
 Une approche Gène Article,
 
 ## Choix des critères d'aggregation
-Le choix de la mesure de similarité/dissimilarité est loin d'être un choix facile. 
+Le choix de la mesure de similarité/dissimilarité est loin d'être un choix facile. Nous proposons à l'utilisateur de choisir entre quatre mesures différentes: 
 * Nous recommandons l'utilisation de la **similarité cosinus** afin de conserver cette notion directionnelle dans le travail sur la matrice document-terme.
-* Néanmoins il est possible pour l'utilisateur d'utiliser la **distance euclidienne**, qui ne donnera aucune information autre que la "taille" du document.
-* **Distance de Hamming**
-* **Distance de Jacard**, rapport entre le cardinal (la taille) de l'intersection des ensembles considérés et le cardinal de l'union des ensembles
-
+* La **Distance de Jacard** est également disponible et correspond au rapport entre le cardinal (la taille) de l'intersection des ensembles considérés et le cardinal de l'union des ensembles. La mesure se réfère au nombre de mots communs sur tous les mots. Plus il y a de mots en commun, plus les deux objets seront similaires. La similitude de Jaccard est bonne pour les cas où le dédoublement n'a pas d'importance en text-mining, nous recommandons également son utilisation si cosine n'est pas concluante.
+* La **Distance de Hamming** est également utilisée en [systématique](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0050069) comme mesure de la distance génétique. Nous avons donc souhaité la mettre à disposition.
+* Finalement, il est possible pour l'utilisateur d'utiliser la **distance euclidienne**, qui ne donnera aucune information autre que la différence de "taille" des documents. Nous l'avons laissée par convention.
 
 ## Références
 * Melissa Ailem, François Role, Mohamed Nadif, Florence Demenais:
@@ -68,5 +67,9 @@ Volume 60,
 2016,
 Pages 252-259,
 ISSN 1532-0464,
+
+* Joseph K Wong, Satish K Pillai, Christopher D Pilcher:
+**Inferring HIV Transmission Dynamics from Phylogenetic Sequence Relationships**,
+https://doi.org/10.1371/journal.pmed.0050069
 
 
