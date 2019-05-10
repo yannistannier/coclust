@@ -7,14 +7,9 @@ On a un ensemble G de k gènes suspectés d’être associés à une maladie et 
 descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié G.
 
 ## Organisation du repository
-* [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application:
-
-Installation
+* [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application: 
 ```
 npm install
-```
-Run
-```
 npm run start
 npm run build
 ```
