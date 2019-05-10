@@ -6,7 +6,7 @@ La présentation de la solution se présente sous forme d'une interface graphiqu
 On a un ensemble G de k gènes suspectés d’être associés à une maladie et on construit des représentations vectorielles de ces gènes. Pour étudier ces interactions, nous avons utilisé des techniques de clustering hiérarchique sur le groupe G étudié ainsi que des techniques de co-clustering afin d’obtenir automatiquement des ensembles de termes
 descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié G.
 
-### Organisation du repository
+## Organisation du repository
 * [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application, les informations d'installation sont disponibles dans le readme du dossier.
 * [Notebook](https://github.com/yannistannier/coclust/tree/master/notebook) : Preprocessing de la base de données et premiers tests de clustering.
 * [Server](https://github.com/yannistannier/coclust/tree/master/server) : Back de l'application, et [Api](https://github.com/JosephGesnouin/coclust/blob/master/server/api.py) Flask.
@@ -52,7 +52,7 @@ Une approche Gène Terme,
 #### Gene Article
 Une approche Gène Article,
 
-### Choix des critères d'aggregation
+## Choix des critères d'aggregation
 
 ## Références
 * Melissa Ailem, François Role, Mohamed Nadif, Florence Demenais:
