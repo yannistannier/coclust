@@ -31,6 +31,7 @@ Nos matrices pouvant s'apparenter à des matrices document-terme, nous avons sou
 * **Stop word removal**: L'une des principales formes de prétraitement consiste à filtrer les données inutiles. Dans le traitement du langage naturel, les mots inutiles sont appelés Stop words. On peut par exemple citer “the”, “a”, “an”, “in” comme des stop words.
 * **Punctuation removal**: Supression de la ponctuation.
 * **TF-IDF**: Cette mesure statistique permet d'évaluer l'importance d'un terme contenu dans un document, relativement à une collection ou un corpus. Le poids augmente proportionnellement au nombre d'occurrences du mot dans le document. Il varie également en fonction de la fréquence du mot dans le corpus. Le choix d'appliquer un TF-IDF sur la matrice pré classification hierarchique / co-clustering aura été laissé à l'utilisateur.
+* **Thresholding** :est utilisé pour supprimer les termes qui apparaissent trop fréquemment, également connus sous le nom de "StopWords spécifiques au corpus". Nous avons donc utilisé les mots les mots apparaissant dans plus de 70% du corpus et ceux apparaisssant dans moins de 1% du corpus.
 
 ## Coclust
 Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) pour le co-clustering ainsi que [Scikit](https://scikit-learn.org/stable/) pour le clustering hiérarchique.
