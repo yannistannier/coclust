@@ -8,6 +8,7 @@ descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié
 
 ## Organisation du repository
 * [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application:
+
 Installation
 ```
 npm install
