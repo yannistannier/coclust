@@ -12,17 +12,12 @@ Installation
 ```
 npm install
 ```
-
-
 Run
 ```
 npm run start
-```
-
-Run
-```
 npm run build
 ```
+
 * [Notebook](https://github.com/yannistannier/coclust/tree/master/notebook) : Preprocessing de la base de données et premiers tests de clustering.
 * [Server](https://github.com/yannistannier/coclust/tree/master/server) : Back de l'application, et [API](https://github.com/JosephGesnouin/coclust/blob/master/server/api.py) Flask.
 
