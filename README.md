@@ -6,6 +6,11 @@ La présentation de la solution se présente sous forme d'une interface graphiqu
 On a un ensemble G de k gènes suspectés d’être associés à une maladie et on construit des représentations vectorielles de ces gènes. Pour étudier ces interactions, nous avons utilisé des techniques de clustering hiérarchique sur le groupe G étudié ainsi que des techniques de co-clustering afin d’obtenir automatiquement des ensembles de termes
 descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié G.
 
+### Organisation du repository
+*[Interface](https://github.com/yannistannier/coclust/tree/master/interface): Front de l'application, les informations d'installation sont disponibles dans le readme du dossier.
+*[Notebook](https://github.com/yannistannier/coclust/tree/master/notebook): Preprocessing
+*[]
+
 ## Datasets
 Dans le but d’être le plus précis possible et d'obtenir un nombre de noms de maladies et de gênes conséquents, il aura fallu prendre en considération de nombreuses bases de données: en particulier, si l’on souhaite concevoir une base de données beaucoup plus grande. C’est ce que nous avons réalisé dans le cadre de ce projet. Les bases de données utilisées sont nombreuses:
 * Online Mendelian Inheritance in Man (OMIM)
@@ -36,14 +41,13 @@ Afin d'être le plus dynamique possible, l'interface permet:
 * De déclencher et d’afficher les résultats d’un clustering hiérarchique selon différents critères d'aggregation (euclidienne, cosinus, Hamming, Jacob...) sur la matrice des vecteurs de gènes de G.
 * De déclencher et d’afficher les résultats du co-clustering sur la matrice des vecteurs de gènes de G.
 
-
 ### Approches proposées
 Différentes approches pour le co-clustering sont proposées:
-#### Gene Gene
-Une approche Gene Gene,
+#### Gène Gène
+Une approche Gène Gène, 
 #### Gene Terme
-Une approche Gene Terme,
+Une approche Gène Terme, 
 #### Gene Article
-Une approche Gene Article,
+Une approche Gène Article,
 
 ## Références
