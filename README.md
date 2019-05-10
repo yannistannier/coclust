@@ -53,10 +53,12 @@ Une approche Gène Article,
 ### Choix des critères d'aggregation
 
 ## Références
-Melissa Ailem, François Role, Mohamed Nadif, Florence Demenais:
-Unsupervised text mining for assessing and augmenting GWAS results,
+* Melissa Ailem, François Role, Mohamed Nadif, Florence Demenais:
+**Unsupervised text mining for assessing and augmenting GWAS results**,
 Journal of Biomedical Informatics,
 Volume 60,
 2016,
 Pages 252-259,
 ISSN 1532-0464,
+
+
