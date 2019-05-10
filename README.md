@@ -7,7 +7,22 @@ On a un ensemble G de k gènes suspectés d’être associés à une maladie et 
 descripteurs pour chacun des sous-groupes identifiés au sein du groupe étudié G.
 
 ## Organisation du repository
-* [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application, les informations d'installation sont disponibles dans le readme du dossier.
+* [Interface](https://github.com/yannistannier/coclust/tree/master/interface) : Front de l'application:
+Installation
+```
+npm install
+```
+
+
+Run
+```
+npm run start
+```
+
+Run
+```
+npm run build
+```
 * [Notebook](https://github.com/yannistannier/coclust/tree/master/notebook) : Preprocessing de la base de données et premiers tests de clustering.
 * [Server](https://github.com/yannistannier/coclust/tree/master/server) : Back de l'application, et [API](https://github.com/JosephGesnouin/coclust/blob/master/server/api.py) Flask.
 
