@@ -20,15 +20,22 @@ L’utilisation de toutes ces bases de données nous aura permis d’isoler une 
 ## Named Entity Recognition
 En plus des noms de maladies et de gènes isolés grâce aux datasets précédents, un NER (Spacy) aura été lancé sur les fichiers asthma et autism afin d'aggrémenter le jeu de données de nouvelles maladies et de nouveaux gênes, le NER est également disponible sur le site pour experimentation.
 
+## PreProcessing
+Nos matrices pouvant s'apparenter à des matrices document-terme, nous avons souhaité utiliser des techniques classiques de text-mining telles:
+* La Lemmatization: 
+* Stop word removal:
+* Punctuation removal:
+* TF-IDF: Cette mesure statistique permet d'évaluer l'importance d'un terme contenu dans un document, relativement à une collection ou un corpus. Le poids augmente proportionnellement au nombre d'occurrences du mot dans le document. Il varie également en fonction de la fréquence du mot dans le corpus. Le choix d'appliquer un TF-IDF sur la matrice pré classification hierarchique / co-clustering aura été laissé à l'utilisateur.
+
 ## Coclust
 Nous avons utilisé la bibliothèque [Coclust](https://github.com/franrole/cclust_package/tree/master/datasets) pour le co-clustering ainsi que [Scikit](https://scikit-learn.org/stable/) pour le clustering hiérarchique.
 
 Afin d'être le plus dynamique possible, l'interface permet:
 * De sélectionner la maladie concernée et de spécifier la liste des gènes G correspondant à cette maladie.
 * De choisir le type de coclustering ainsi que le nombre de cluster si l'utilisateur souhaite en spécifier un, dans le cas contraire le nombre de clusters maximisant la modularity sera affiché.
-* De déclencher et d’afficher les résultats d’un clustering hiérarchique (en justifiant le choix du critère d’agrégation) sur la matrice des vecteurs de gènes de G.
-* De déclencher et d’afficher les résultats d’un co-clustering sur la matrice des vecteurs de gènes de G,
-avec possibilité de choisir entre les différentes méthodes disponibles dans la bibliothèque Coclust.
+* De déclencher et d’afficher les résultats d’un clustering hiérarchique selon différents critères d'aggregation (euclidienne, cosinus, Hamming, Jacob...) sur la matrice des vecteurs de gènes de G.
+* De déclencher et d’afficher les résultats du co-clustering sur la matrice des vecteurs de gènes de G.
+
 
 ### Approches proposées
 Différentes approches pour le co-clustering sont proposées:
