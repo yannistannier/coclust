@@ -67,6 +67,7 @@ Volume 60,
 2016,
 Pages 252-259,
 ISSN 1532-0464,
+https://www.sciencedirect.com/science/article/pii/S1532046416000307
 
 * Joseph K Wong, Satish K Pillai, Christopher D Pilcher:
 **Inferring HIV Transmission Dynamics from Phylogenetic Sequence Relationships**,
