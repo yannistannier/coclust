@@ -45,12 +45,9 @@ Afin d'être le plus dynamique possible, l'interface permet:
 
 ### Approches proposées
 Différentes approches pour le co-clustering sont proposées:
-#### Gène Gène
-Une approche Gène Gène, 
-#### Gene Terme
-Une approche Gène Terme, 
-#### Gene Article
-Une approche Gène Article,
+* Une approche Gène Gène, 
+* Une approche Gène Terme, 
+* Une approche Gène Article,
 
 ## Choix des critères d'aggregation
 Le choix de la mesure de similarité/dissimilarité est loin d'être un choix facile. Nous proposons à l'utilisateur de choisir entre quatre mesures différentes: 
