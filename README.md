@@ -53,6 +53,12 @@ Une approche Gène Terme,
 Une approche Gène Article,
 
 ## Choix des critères d'aggregation
+Le choix de la mesure de similarité/dissimilarité est loin d'être un choix facile. 
+* Nous recommandons l'utilisation de la **similarité cosinus** afin de conserver cette notion directionnelle dans le travail sur la matrice document-terme.
+* Néanmoins il est possible pour l'utilisateur d'utiliser la distance euclidienne, qui ne donnera aucune information autre que la "taille" du document.
+* Hamming
+* Jacard
+
 
 ## Références
 * Melissa Ailem, François Role, Mohamed Nadif, Florence Demenais:
