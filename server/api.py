@@ -13,6 +13,7 @@ import seaborn as sns
 import base64
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.spatial.distance import pdist, squareform
 import io
 from flask import send_file
 
@@ -29,6 +30,12 @@ maladiesjson = json.load(open("maladies_index.json"))
 genesjson = json.load(open("genes_index.json"))
 asthmajson = { str(v["id"]):v for v in json.load(open("asthma_preprocessed.json")) }
 
+
+def progress(nb, m):
+    p = (nb/m)*100
+    with open("progress.txt", 'w') as filetowrite:
+        filetowrite.write(str(int(p)))
+
 @app.route('/ner', methods=['POST'])
 def hello_world():
 	#print(request.json["text"])
@@ -43,7 +50,6 @@ def hello_world():
 	return jsonify(text=[(t.text, t.ent_type_ if t.ent_type_ else "default") for t in doc], count={"gene":gene, "disease":disease})
 
 
-
 @app.route('/maladies', methods=['GET'])
 def maladies():
 	mds = [ { "value" : g, "label" : g} for g in list(maladiesgenes.keys()) ]
@@ -55,10 +61,11 @@ def maladies_genes(m):
 	return jsonify(mds)
 
 
-
 @app.route('/genes_articles', methods=['POST'])
 def genes_articles():
-	print(request.json)
+	p_max = 20
+	progress(0, p_max)
+
 	tfidf = request.json["tfidf"]
 	distance = request.json["distance"]
 	coclust = int(request.json["coclust"])
@@ -71,6 +78,8 @@ def genes_articles():
 		vec = TfidfVectorizer()
 	else:
 		vec = CountVectorizer()
+
+	progress(2, p_max)
 	
 	X = vec.fit_transform(genes_articles_str)
 	nb = nb_cluster
@@ -81,12 +90,15 @@ def genes_articles():
 		# _, modularities = best_modularity_partition(X, rng, n_rand_init=1)
 		# nb = rng[np.argmax(modularities)]
 		modularities=[]
-		for x in rng:
+		for idx, x in enumerate(rng):
 			print(x)
 			m = CoclustMod(n_clusters=x, n_init=1).fit(X)
 			modularities.append(m.modularity)
+			progress(3+idx, p_max)
 		nb = rng[np.argmax(modularities)]
-	
+
+	progress(14, p_max)
+
 	if coclust == 1:
 		model = CoclustMod(n_clusters=nb, random_state=0)
 	if coclust == 2:
@@ -94,11 +106,14 @@ def genes_articles():
 	if coclust == 3:
 		model = CoclustInfo()
 	
+	progress(15, p_max)
 
 	dt = X.toarray()
 	model.fit(dt)
 	fit_data = dt[np.argsort(model.row_labels_)]
 	fit_data = fit_data[:, np.argsort(model.column_labels_)]
+
+	progress(16, p_max)
 
 	plt.figure(figsize=(22,5))
 	if nb_cluster == 0 and coclust != 3:
@@ -109,16 +124,20 @@ def genes_articles():
 		plt.title("Max modularity for "+str(nb)+" clusters ("+str(round(np.max(modularities),3))+")")
 		plt.axvline(x=nb, color='r', linestyle='-')
 	plt.subplot(132)
-	sns.heatmap(dt,cmap="BuPu", yticklabels=False, xticklabels=False, cbar=False)
+	sns.heatmap(np.log(dt+1),cmap="BuPu", yticklabels=False, xticklabels=False, cbar=False)
 	plt.title("Heatmap on Original Data")
 	plt.subplot(133)
-	sns.heatmap(fit_data,cmap="BuPu", yticklabels=False, xticklabels=False, cbar=False)
+	sns.heatmap(np.log(fit_data+1),cmap="BuPu", yticklabels=False, xticklabels=False, cbar=False)
 	plt.title("CoclustMod %i clusters"%nb)
 	plt.savefig("img-ga1.jpg",bbox_inches='tight',  pad_inches = 0)
 
+	progress(17, p_max)
 
 	# hierarchical clustering
-	Z = linkage(dt, 'single', 'euclidean')
+	Z = linkage(dt, 'single', distance)
+	pw = squareform(pdist(dt,distance))
+
+	progress(18, p_max)
 
 	plt.figure(figsize=(15, 7))
 	plt.xlabel('')
@@ -128,6 +147,15 @@ def genes_articles():
 		labels = selected_genes
 	)
 	plt.savefig("img-ga2.jpg",bbox_inches='tight',  pad_inches = 0)
+
+	progress(19, p_max)
+
+	plt.figure(figsize=(15, 7))
+	plt.boxplot(pw)
+	plt.xlabel("Genes sets")
+	plt.ylabel("Pairwise "+distance+" similarities")
+	plt.savefig("img-ga3.jpg",bbox_inches='tight',  pad_inches = 0)
+
 	plt.close('all')
 
 	
@@ -137,6 +165,10 @@ def genes_articles():
 
 @app.route('/genes_termes', methods=['POST'])
 def genes_termes():
+	p_max = 6
+	progress(0, p_max)
+
+	distance = request.json["distance"]
 	tfidf = request.json["tfidf"]
 	coclust = int(request.json["coclust"])
 	selected_genes = [ v["label"] for v in request.json["genes"]]
@@ -153,6 +185,9 @@ def genes_termes():
 	else:
 		vec = CountVectorizer(max_df=0.7, min_df=0.01)
 	
+
+	progress(1, p_max)
+
 	dt = vec.fit_transform(articles_text)
 
 	matrix_article_terms = dt.toarray()
@@ -162,6 +197,9 @@ def genes_termes():
 		for ge in article["genes"]:
 			if ge in selected_genes:
 				matrix_genes_terms[ge] +=  row
+
+	progress(2, p_max)
+
 	list_matrix_genes_terms = [ v for k,v in matrix_genes_terms.items() ]
 	list_genes = [ k for k,v in matrix_genes_terms.items() ]
 	#df3 = pd.DataFrame(list_matrix_genes_terms, columns=vec.get_feature_names())
@@ -172,6 +210,8 @@ def genes_termes():
 		model = CoclustSpecMod(n_clusters=nb_cluster, random_state=0)
 	if coclust == 3:
 		model = CoclustInfo()
+
+	progress(3, p_max)
 
 	dt = np.array(list_matrix_genes_terms)
 	m1 = model.fit(dt)
@@ -188,6 +228,8 @@ def genes_termes():
 	plt.title("CoclustMod %i clusters"%nb_cluster, fontdict = {'fontsize' : 20})
 	plt.savefig("img-gt1.jpg", bbox_inches='tight',  pad_inches = 0)
 
+	progress(4, p_max)
+
 	# Top terms by cluster
 	nb_clust = np.unique(model.column_labels_)
 	nm = np.array(vec.get_feature_names())
@@ -201,9 +243,12 @@ def genes_termes():
 		name = col[idx]
 		cluster.append({"name" : list(name[0:8]), "value": list(value[0:8])})
 	
+	progress(5, p_max)
 
 	# hierarchical clustering
-	Z = linkage(dt, 'single', 'euclidean')
+	Z = linkage(dt, 'single', distance)
+	pw = squareform(pdist(dt,distance))
+
 	plt.figure(figsize=(15, 7))
 	# plt.title('Hierarchical Clustering - Hamming')
 	plt.xlabel('')
@@ -213,6 +258,14 @@ def genes_termes():
 		labels = list_genes
 	)
 	plt.savefig("img-gt2.jpg",bbox_inches='tight',  pad_inches = 0)
+
+
+	plt.figure(figsize=(15, 7))
+	plt.boxplot(pw)
+	plt.xlabel("Genes sets")
+	plt.ylabel("Pairwise "+distance+" similarities")
+	plt.savefig("img-gt3.jpg",bbox_inches='tight',  pad_inches = 0)
+
 	plt.close('all')
 
 	return jsonify({"tab":2, "cluster" : cluster})
@@ -221,7 +274,9 @@ def genes_termes():
 
 @app.route('/genes_genes', methods=['POST'])
 def genes_genes():
-	print(request.json)
+	p_max = 14
+	progress(0, p_max)
+
 	tfidf = request.json["tfidf"]
 	distance = request.json["distance"]
 	coclust = int(request.json["coclust"])
@@ -237,6 +292,8 @@ def genes_genes():
 	
 	X = vec.fit_transform(genes_articles_str)
 
+	progress(1, p_max)
+
 	g_g = np.dot(X.toarray(), X.toarray().T)
 	diag = 1 - np.diag((np.ones(g_g.shape[0])))
 	X = g_g * diag
@@ -247,10 +304,11 @@ def genes_genes():
 		step = round(xn/10) if round(xn/10) > 0 else 1
 		rng =  range(1, xn, step)
 		modularities=[]
-		for x in rng:
+		for idx,x in enumerate(rng):
 			print(x)
 			m = CoclustMod(n_clusters=x, n_init=1).fit(X)
 			modularities.append(m.modularity)
+			progress(2+idx, p_max)
 		nb = rng[np.argmax(modularities)]
 	
 	if coclust == 1:
@@ -264,6 +322,8 @@ def genes_genes():
 	model.fit(dt)
 	fit_data = dt[np.argsort(model.row_labels_)]
 	fit_data = fit_data[:, np.argsort(model.column_labels_)]
+
+	progress(13, p_max)
 
 	plt.figure(figsize=(22,5))
 	if nb_cluster == 0 and coclust != 3:
@@ -281,8 +341,10 @@ def genes_genes():
 	plt.title("CoclustMod %i clusters"%nb)
 	plt.savefig("img-gg1.jpg",bbox_inches='tight',  pad_inches = 0)
 
-	
-	Z = linkage(dt, 'single', 'euclidean')
+	progress(14, p_max)
+
+	Z = linkage(dt, 'single', distance)
+
 
 	plt.figure(figsize=(15, 7))
 	plt.xlabel('')

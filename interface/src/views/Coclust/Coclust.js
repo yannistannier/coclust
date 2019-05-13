@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Badge, Row, Col, Card, CardHeader, Button, CardFooter, CardBody, Label, Input, FormGroup,
-ListGroup, ListGroupItem, Nav, NavItem, NavLink, Table, TabContent, TabPane, CustomInput} from 'reactstrap';
+ListGroup, ListGroupItem, Nav, NavItem, NavLink, Table, TabContent, TabPane, CustomInput, Progress} from 'reactstrap';
 import MultiSelect from "@kenshooui/react-multi-select";
 import Select from 'react-select';
 import axios from 'axios'
@@ -26,7 +26,8 @@ class Coclust extends Component {
     this.handleNbCluster = this.handleNbCluster.bind(this)
     this.handleDistance = this.handleDistance.bind(this)
     this.callApi = this.callApi.bind(this)
-
+    this.progressBar = this.progressBar.bind(this)
+    this.interval = null
     this.state = {
       maladies:[],
       genes:[],
@@ -43,13 +44,46 @@ class Coclust extends Component {
       tab2:null,
       cluster2:[],
 
-      tab3:null
+      tab3:null,
+      progress:0,
     };
   }
 
   componentDidMount(){
-    this.getMaladies()
+    this.getMaladies();
+
+    this.startProgress()
   }
+
+  componentWillUnmount() {
+      clearInterval(this.interval);
+  }
+
+  startProgress(){
+    this.interval = setInterval(function(){
+      this.progressBar()
+    }.bind(this), 1000);
+  }
+
+  progressBar(){
+    console.log('okk___')
+    if(this.state.tab1 == "pending" || this.state.tab2 == "pending" || this.state.tab3 == "pending"){
+
+        axios.get('http://localhost:5001/progress')
+        .then(function (response) {
+          this.setState({
+            progress: response.data
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+
+
+        console.log("----")
+    }
+  }
+
 
   selectGenes(selectedItems) {
     this.setState({
@@ -79,7 +113,18 @@ class Coclust extends Component {
         activeTab: tab
       });
 
-      console.log(tab)
+        if(tab == "1" && this.state.tab1 == null){
+            this.setState({tab1:"pending"})
+            this.callApi("http://localhost:5000/genes_articles")
+        }
+        if(tab == "2" && this.state.tab2 == null){
+          this.setState({tab2:"pending"})
+          this.callApi("http://localhost:5000/genes_termes")
+        }
+        if(tab == "3" && this.state.tab3 == null){
+          this.setState({tab3:"pending"})
+          this.callApi("http://localhost:5000/genes_genes")
+        }
 
 
     }
@@ -130,20 +175,25 @@ class Coclust extends Component {
         if(this.state.activeTab == "1"){
             this.setState({tab1:"pending"})
             this.callApi("http://localhost:5000/genes_articles")
+            this.setState({tab2:null, tab3:null})
         }
         if(this.state.activeTab == "2"){
           this.setState({tab2:"pending"})
           this.callApi("http://localhost:5000/genes_termes")
+          this.setState({tab1:null, tab3:null})
         }
         if(this.state.activeTab == "3"){
           this.setState({tab3:"pending"})
           this.callApi("http://localhost:5000/genes_genes")
+          this.setState({tab2:null, tab3:null})
         }
-        
     }
   }
 
   callApi(url){
+      this.setState({progress:0});
+      //this.startProgress();
+
       axios.post(url, {
         genes: this.state.selectGenes, tfidf : this.state.tfidf, coclust: this.state.coclust,
         nb : this.state.nb, distance:this.state.distance
@@ -166,11 +216,13 @@ class Coclust extends Component {
       .catch(function (error) {
         console.log(error);
       });
+
+      //clearInterval(this.interval);
   }
 
 
 render() {
-    const { items, selectedItems, maladies, genes, distance, img1, cluster2, tab1, tab2, tab3} = this.state;
+    const { items, selectedItems, maladies, genes, distance, img1, cluster2, tab1, tab2, tab3, progress} = this.state;
     let r = Math.random().toString(36).substring(7);
 
     let c1 = cluster2.map(function(d, idx){
@@ -338,6 +390,11 @@ render() {
                   <TabPane tabId="1">
                     {tab1 == "fullfilled" &&
                       <div> 
+                          <h3> Boxplot </h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-ga3-"+r+".jpg"}  width="80%" style={{maxHeight:250}}/>
+                          </div>
+
                           <h3> Coclust </h3>
                           <div style={{textAlign:"center"}}>
                             <img src={"http://localhost:5000/images/img-ga1-"+r+".jpg"}  width="100%" style={{maxHeight:250}}/>
@@ -351,6 +408,9 @@ render() {
                     {tab1 == "pending" &&
                       <div style={{textAlign:"center", padding:50}}>
                         <Loader type="Grid" color="#4dbd74" />
+                        <div style={{paddingTop:20}}>
+                            <Progress striped value={progress} animated/>
+                        </div>
                       </div>
                     }
                     {tab1 == null &&
@@ -366,6 +426,9 @@ render() {
                     {tab2 == "pending" &&
                       <div style={{textAlign:"center", padding:50}}>
                         <Loader type="Grid" color="#4dbd74" />
+                        <div style={{paddingTop:20}}>
+                            <Progress striped value={progress} animated/>
+                        </div>
                       </div>
                     }
 
@@ -376,6 +439,10 @@ render() {
                     }
                      {tab2 == "fullfilled" &&
                         <div>
+                           <h3> Boxplot </h3>
+                          <div style={{textAlign:"center"}}>
+                            <img src={"http://localhost:5000/images/img-gt3-"+r+".jpg"}  width="80%" style={{maxHeight:250}}/>
+                          </div>
                           <h3> Hierarchical Clustering - {distance}</h3>
                           <div style={{textAlign:"center"}}>
                             <img src={"http://localhost:5000/images/img-gt2-"+r+".jpg"}  height={300}/>
@@ -399,6 +466,9 @@ render() {
                     {tab3 == "pending" &&
                       <div style={{textAlign:"center", padding:50}}>
                         <Loader type="Grid" color="#4dbd74" />
+                        <div style={{paddingTop:20}}>
+                            <Progress striped value={progress} animated/>
+                        </div>
                       </div>
                     }
 
